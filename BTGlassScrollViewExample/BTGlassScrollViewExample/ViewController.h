@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "BTGlassScrollView.h"
 
-@interface ViewController : UIViewController <UIScrollViewAccessibilityDelegate>
+@interface ViewController : UIViewController <UIScrollViewAccessibilityDelegate, UIWebViewDelegate>
 
 @end

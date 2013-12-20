@@ -146,8 +146,30 @@
     box3.backgroundColor = [UIColor colorWithWhite:0 alpha:.15];
     [view addSubview:box3];
     
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(10, 140, 300, 200)];
+    [webView setBackgroundColor:[UIColor clearColor]];
+    NSString *myHTML = @"<html><body><h1>BTGlassScrollView</h1><p>This is a view for you to either use as-is or modify the source. The view comes loaded with the ability to:</p><ol><li>Create a self contained view replicating the look and feel of one panel of Yahoo! Weather app</li><li>Blur the background image and/or transform them just the right amount without additional code form you</li><li>Customized the animation/blur/height/shadow/etc. with a chagne of a number in the header #define</li></ol><p>I have been a big fan of Yahoo! weather app. I highly respect the work they have done. I wanted to replicate and also generalize the approach for anyone to use and/or study. This was not associated with Yahoo! No source was lifted from Yahoo! So there will be a few subtle differences between BTGlassScrollView and Yahoo! weather app. For example, this view is built to stay under one navigation bar which in turns allows for \"swipe to back\" on iOS7.</p><p>The view is a subclass of a UIView. It contains 2 scrollViews, background and foreground. backgroundScrollView consists of 2 imageviews, normal and blurred. The alpha of the blurred one changes as the background scrolls. And the background scrolls as the foreground scrolls (at a different rate). The foregroundScrollView consists of maskLayers (gradient) and the foregroundView (which is whatever you want it to be). Between foreground and background, 2 shadowsLayer is added on the top and bottom to give a better readability.</p></body></html>";
+    [webView loadHTMLString:myHTML baseURL:nil];
+    [webView setDelegate:self];
+    [view addSubview:webView];
+    
     return view;
 }
+
+- (void)webViewDidFinishLoad:(UIWebView *)aWebView
+{
+    CGRect frame = aWebView.frame;
+    frame.size.height = 1;
+    aWebView.frame = frame;
+    CGSize fittingSize = [aWebView sizeThatFits:CGSizeZero];
+    frame.size = fittingSize;
+    aWebView.frame = frame;
+    
+    [_glassScrollView setFrame:CGRectMake(_glassScrollView.frame.origin.x, _glassScrollView.frame.origin.y, _glassScrollView.frame.size.width, fittingSize.height)];
+    
+    NSLog(@"size: %f, %f", fittingSize.width, fittingSize.height);
+}
+
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
