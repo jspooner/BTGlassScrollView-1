@@ -136,28 +136,19 @@
     box1.backgroundColor = [UIColor colorWithWhite:0 alpha:.15];
     [view addSubview:box1];
     
-    UIView *box2 = [[UIView alloc] initWithFrame:CGRectMake(5, 270, 310, 300)];
-    box2.layer.cornerRadius = 3;
-    box2.backgroundColor = [UIColor colorWithWhite:0 alpha:.15];
-    [view addSubview:box2];
-    
-    UIView *box3 = [[UIView alloc] initWithFrame:CGRectMake(5, 575, 310, 125)];
-    box3.layer.cornerRadius = 3;
-    box3.backgroundColor = [UIColor colorWithWhite:0 alpha:.15];
-    [view addSubview:box3];
-    
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(10, 140, 300, 200)];
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(5, 5, 300, 200)];
     [webView setBackgroundColor:[UIColor clearColor]];
     NSString *myHTML = @"<html><body><h1>BTGlassScrollView</h1><p>This is a view for you to either use as-is or modify the source. The view comes loaded with the ability to:</p><ol><li>Create a self contained view replicating the look and feel of one panel of Yahoo! Weather app</li><li>Blur the background image and/or transform them just the right amount without additional code form you</li><li>Customized the animation/blur/height/shadow/etc. with a chagne of a number in the header #define</li></ol><p>I have been a big fan of Yahoo! weather app. I highly respect the work they have done. I wanted to replicate and also generalize the approach for anyone to use and/or study. This was not associated with Yahoo! No source was lifted from Yahoo! So there will be a few subtle differences between BTGlassScrollView and Yahoo! weather app. For example, this view is built to stay under one navigation bar which in turns allows for \"swipe to back\" on iOS7.</p><p>The view is a subclass of a UIView. It contains 2 scrollViews, background and foreground. backgroundScrollView consists of 2 imageviews, normal and blurred. The alpha of the blurred one changes as the background scrolls. And the background scrolls as the foreground scrolls (at a different rate). The foregroundScrollView consists of maskLayers (gradient) and the foregroundView (which is whatever you want it to be). Between foreground and background, 2 shadowsLayer is added on the top and bottom to give a better readability.</p></body></html>";
     [webView loadHTMLString:myHTML baseURL:nil];
     [webView setDelegate:self];
-    [view addSubview:webView];
+    [box1 addSubview:webView];
     
     return view;
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView
 {
+    NSLog(@"webViewDidFinishLoad");
     CGRect frame = aWebView.frame;
     frame.size.height = 1;
     aWebView.frame = frame;
@@ -165,9 +156,22 @@
     frame.size = fittingSize;
     aWebView.frame = frame;
     
-    [_glassScrollView setFrame:CGRectMake(_glassScrollView.frame.origin.x, _glassScrollView.frame.origin.y, _glassScrollView.frame.size.width, fittingSize.height)];
+    NSLog(@"webview size: %f, %f", fittingSize.width, fittingSize.height);
     
-    NSLog(@"size: %f, %f", fittingSize.width, fittingSize.height);
+    UIView *box1 = (UIView*)aWebView.superview;
+    UIView *view = (UIView*)box1.superview;
+    
+    // resize box background image
+    [box1 setFrame:CGRectMake(box1.frame.origin.x, box1.frame.origin.y, box1.frame.size.width, fittingSize.height)];
+    NSLog(@"box size: %f, %f", box1.frame.size.width, box1.frame.size.height);
+    
+    // resize the view that is passed to glassScrolliew as the foreground
+    [view setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, box1.frame.origin.y+fittingSize.height)];
+    NSLog(@"view size: %f, %f", view.frame.size.width, view.frame.size.height);
+    
+//    [_glassScrollView setFrame:CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, 1031.000000)];
+    
+    
 }
 
 

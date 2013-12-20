@@ -221,7 +221,7 @@
 				ORGANIZATIONNAME = Byte;
 				TargetAttributes = {
 					083047F61811D7500068CA79 = {
-						DevelopmentTeam = G9BS5LA6CZ;
+						DevelopmentTeam = 4894QC5WKZ;
 					};
 					083048111811D7500068CA79 = {
 						TestTargetID = 083047F61811D7500068CA79;
